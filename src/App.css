@@ -1,7 +1,6 @@
 .App {
   /* text-align: center; */
 }
-
 .custom-input {
   width: 100%;
   border-radius: 30px;
@@ -9,8 +8,43 @@
   border: none;
   transition: border-color 0.3s; /* Add transition for smoother focus effect */
 }
-
 /* Change border color on focus */
 .custom-input:focus {
   border-color: blue !important;
+}
+/*sidebar css*/
+.Sidebar {
+  margin: 0px;
+  height: 100vh;
+  width: 200px;
+  background-color: rgb(135, 193, 220);
+  color: rgb(0, 0, 0);
+}
+.SidebarList {
+  height: auto;
+  width: 100%;
+  padding: 0px;
+  margin-top: 0px;
+}
+.SidebarList.row:hover {
+  cursor: pointer;
+  background-color: "#87C1DC";
+}
+.SidebarList.row #active {
+  background-color: rgb(135, 193, 220);
+}
+#icon {
+  flex: 30%;
+  display: grid;
+  place-items: center;
+}
+#title {
+  flex: 70%;
+  font-size: 15px;
+}
+.row {
+  display: flex;
+}
+li {
+  margin: 20px;
 }
