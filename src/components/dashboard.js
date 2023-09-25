@@ -3,17 +3,35 @@ import Sidebar from "./Sidebar";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { useNavigate } from "react-router-dom";
-const data = [
-  { value: 25, label: "Employees" },
-  { value: 25, label: "Total Accessories" },
-  { value: 10, label: "Assigned Accessories" },
-  { value: 15, label: "Not Assigned Accessories" },
-];
+import axios from "axios";
+import CountUp from "react-countup";
+import { api_url } from "../apiutils";
+import { useEffect, useState } from "react";
+
 const size = {
   width: 550,
   height: 400,
 };
 function Dashboard() {
+  const [empCount, SetempCount] = useState([]);
+  const employeeCount = async (e) => {
+    let response = await axios.get(`${api_url}employee/show`);
+    //axios used to connect with the api url
+    SetempCount(response.data?.employees);
+    console.log("data", response.data?.employees);
+  };
+
+  useEffect(() => {
+    employeeCount();
+  }, []);
+
+  const data = [
+    { value: 12, label: "Employees" },
+    { value: 25, label: "Total Accessories" },
+    { value: 10, label: "Assigned Accessories" },
+    { value: 15, label: "Not Assigned Accessories" },
+  ];
+
   const navigate = useNavigate();
   const cardInfo = [{ icon: <ArrowCircleRightIcon />, arrow: "Arrow" }];
   return (
@@ -22,6 +40,11 @@ function Dashboard() {
         <Sidebar />
         <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
           <Box height={80} />
+          <Typography
+            sx={{ fontSize: "30px", fontWeight: "bold", paddingBottom: "10px" }}
+          >
+            Dashboard
+          </Typography>
           <Box height={2} />
           {/* main grid */}
           <Grid container spacing={1}>
@@ -43,7 +66,7 @@ function Dashboard() {
                           color: "#FFFFFF",
                         }}
                       >
-                        25
+                        <CountUp end={empCount.length} duration={1} />
                       </Typography>
                     </Box>
                   </Grid>
@@ -180,6 +203,10 @@ function Dashboard() {
                         alignItems: "center",
                         bgcolor: "#388E3C",
                         color: "#FFFFFF",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        navigate("/assignedaccessories");
                       }}
                     >
                       <Typography sx={{ fontSize: "14px" }}>
@@ -235,6 +262,10 @@ function Dashboard() {
                         alignItems: "center",
                         bgcolor: "#616161",
                         color: "#FFFFFF",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        navigate("/notassignedaccessories");
                       }}
                     >
                       <Typography sx={{ fontSize: "14px" }}>

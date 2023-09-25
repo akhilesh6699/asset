@@ -8,13 +8,12 @@ import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import PeopleIcon from "@mui/icons-material/People";
 import AppsIcon from "@mui/icons-material/Apps";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
 import FolderIcon from "@mui/icons-material/Folder";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -100,9 +99,9 @@ const Sidebar = () => {
   }));
   const menuItems = [
     {
-      text: "User",
-      icon: <PeopleIcon />,
-      path: "/user",
+      text: "Home",
+      icon: <HomeIcon />,
+      path: "/dashboard",
     },
     {
       text: "Dashboard",
@@ -128,19 +127,18 @@ const Sidebar = () => {
         {
           text: "Add Employees",
           icon: <GroupAddOutlinedIcon />,
-          path: "/add employees",
+          path: "/addemployees",
         },
         {
           text: "Add Accessories",
           icon: <PostAddOutlinedIcon />,
-          path: "/add accessories",
+          path: "/addaccessories",
+        },
+        {
+          text: "Assign",
+          path: "/assign",
         },
       ],
-    },
-    {
-      text: "Calendar",
-      icon: <CalendarMonthIcon />,
-      path: "/calendar",
     },
     {
       text: "Logout",

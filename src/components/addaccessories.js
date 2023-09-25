@@ -7,11 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import axios from "axios";
-import { api_url } from "../apiutils";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -30,26 +31,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     borderBottom: 0,
   },
 }));
-
-// const filteredUsers = [
-//   {
-//     id: "2341",
-//     name: "vinay",
-//     email: "egafgaf@gmail.com",
-//     number: "9897968564",
-//   },
-// ];
-export default function Employees() {
+const filteredUsers = [
+  { name: "Monitor" },
+  { name: "CPU" },
+  { name: "Mouse" },
+  { name: "Keyboard" },
+  { name: "Chairs" },
+];
+export default function AddAccessories() {
   const navigate = useNavigate();
-  const [employees, setEmployees] = React.useState([]);
-  const getEmployees = async () => {
-    let response = await axios.get(`${api_url}employee/show`);
-    //console.log(response);
-    setEmployees(response?.data?.employees);
-  };
-  React.useEffect(() => {
-    getEmployees();
-  }, []);
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -59,11 +49,11 @@ export default function Employees() {
           <Typography
             sx={{ fontSize: "30px", fontWeight: "bold", paddingBottom: "10px" }}
           >
-            Employees
+            Add Accessories
           </Typography>
           <Paper
             sx={{
-              width: "100%",
+              width: "60%",
               overflow: "hidden",
               border: "1px solid",
               background: "#fff",
@@ -77,44 +67,35 @@ export default function Employees() {
               >
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell>Sl. no</StyledTableCell>
-                    <StyledTableCell align="left">Employee ID</StyledTableCell>
                     <StyledTableCell align="left">
-                      Employee Name
+                      Accessories Name
                     </StyledTableCell>
-                    <StyledTableCell align="left">
-                      Employee Email
-                    </StyledTableCell>
-                    <StyledTableCell align="left">Phone Number</StyledTableCell>
+                    <StyledTableCell align="left"></StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {employees.map((row, index) => {
+                  {filteredUsers.map((row) => {
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>
-                        <StyledTableCell component="th" scope="row">
-                          {index + 1}
-                        </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.employeeId}
+                          {row.name}
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
-                          onClick={() => {
-                            navigate("/employeename");
-                          }}
-                          sx={{
-                            cursor: "pointer",
-                          }}
+                          sx={{ display: "flex", cursor: "pointer" }}
                         >
-                          {row.name}
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          {row.email}
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          {row.phone}
+                          <RemoveIcon
+                            onClick={() => {
+                              navigate("/addaccessories");
+                            }}
+                          />
+                          <Typography px={2}>1</Typography>
+                          <AddIcon
+                            onClick={() => {
+                              navigate("/addaccessories");
+                            }}
+                          />
                         </StyledTableCell>
                       </StyledTableRow>
                     );
@@ -123,6 +104,34 @@ export default function Employees() {
               </Table>
             </TableContainer>
           </Paper>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            width="750px"
+            height="100px"
+            mt={4}
+          >
+            <Button
+              sx={{
+                bgcolor: "green",
+                color: "white",
+                paddingLeft: "20px",
+                paddingRight: "20px",
+                paddingTop: "30px",
+                paddingBottom: "30px",
+                height: "55px",
+                fontSize: "20px",
+                fontWeight: "bold",
+                transition: "background-color 0.3s",
+                "&:hover": {
+                  backgroundColor: "#E65100",
+                },
+              }}
+            >
+              Submit
+            </Button>
+          </Box>
         </Box>
       </Box>
     </div>

@@ -7,8 +7,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import axios from "axios";
-import { api_url } from "../apiutils";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { Box, Typography } from "@mui/material";
@@ -30,26 +28,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     borderBottom: 0,
   },
 }));
-
-// const filteredUsers = [
-//   {
-//     id: "2341",
-//     name: "vinay",
-//     email: "egafgaf@gmail.com",
-//     number: "9897968564",
-//   },
-// ];
-export default function Employees() {
+const filteredUsers = [
+  { name: "Monitor", assigned: "10" },
+  { name: "CPU", assigned: "10" },
+  { name: "Mouse", assigned: "10" },
+  { name: "Keyboard", assigned: "10" },
+  { name: "Chairs", assigned: "10" },
+];
+export default function AssignedAccessories() {
   const navigate = useNavigate();
-  const [employees, setEmployees] = React.useState([]);
-  const getEmployees = async () => {
-    let response = await axios.get(`${api_url}employee/show`);
-    //console.log(response);
-    setEmployees(response?.data?.employees);
-  };
-  React.useEffect(() => {
-    getEmployees();
-  }, []);
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -59,7 +46,7 @@ export default function Employees() {
           <Typography
             sx={{ fontSize: "30px", fontWeight: "bold", paddingBottom: "10px" }}
           >
-            Employees
+            Assigned Accessories
           </Typography>
           <Paper
             sx={{
@@ -78,18 +65,14 @@ export default function Employees() {
                 <TableHead>
                   <TableRow>
                     <StyledTableCell>Sl. no</StyledTableCell>
-                    <StyledTableCell align="left">Employee ID</StyledTableCell>
                     <StyledTableCell align="left">
-                      Employee Name
+                      Accessories Name
                     </StyledTableCell>
-                    <StyledTableCell align="left">
-                      Employee Email
-                    </StyledTableCell>
-                    <StyledTableCell align="left">Phone Number</StyledTableCell>
+                    <StyledTableCell align="left">Assigned</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {employees.map((row, index) => {
+                  {filteredUsers.map((row, index) => {
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>
@@ -97,24 +80,10 @@ export default function Employees() {
                           {index + 1}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.employeeId}
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="left"
-                          onClick={() => {
-                            navigate("/employeename");
-                          }}
-                          sx={{
-                            cursor: "pointer",
-                          }}
-                        >
                           {row.name}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.email}
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          {row.phone}
+                          {row.assigned}
                         </StyledTableCell>
                       </StyledTableRow>
                     );
