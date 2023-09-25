@@ -12,6 +12,8 @@ import Sidebar from "./Sidebar";
 import { Box, Button, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import axios from "axios";
+import { api_url } from "../apiutils";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,7 +40,21 @@ const filteredUsers = [
   { name: "Keyboard" },
   { name: "Chairs" },
 ];
+
 export default function AddAccessories() {
+  const addAccessories = async (name) => {
+    if (name === "Monitor") {
+      let response = await axios.post(`${api_url}assign-monitor-id`);
+    } else if (name == "CPU") {
+      let response = await axios.post(`${api_url}assign-cpu-id`);
+    } else if (name == "Mouse") {
+      let response = await axios.post(`${api_url}assign-mouse-id`);
+    } else if (name == "Keyboard") {
+      let response = await axios.post(`${api_url}assign-keyboard-id`);
+    } else if (name == "Chairs") {
+      let response = await axios.post(`${api_url}assign-chair-id`);
+    }
+  };
   const navigate = useNavigate();
   return (
     <div>
@@ -94,6 +110,7 @@ export default function AddAccessories() {
                           <AddIcon
                             onClick={() => {
                               navigate("/addaccessories");
+                              addAccessories(row.name);
                             }}
                           />
                         </StyledTableCell>
@@ -104,7 +121,7 @@ export default function AddAccessories() {
               </Table>
             </TableContainer>
           </Paper>
-          <Box
+          {/* <Box
             display="flex"
             justifyContent="center"
             alignItems="center"
@@ -121,7 +138,7 @@ export default function AddAccessories() {
                 paddingTop: "30px",
                 paddingBottom: "30px",
                 height: "55px",
-                fontSize: "20px",
+                fontSize: "20px", 
                 fontWeight: "bold",
                 transition: "background-color 0.3s",
                 "&:hover": {
@@ -131,7 +148,7 @@ export default function AddAccessories() {
             >
               Submit
             </Button>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </div>
