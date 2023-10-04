@@ -9,7 +9,9 @@ import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Box, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+
+import { Box, Typography, TextField } from "@mui/material";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -49,6 +51,13 @@ export default function CPU() {
             sx={{ fontSize: "30px", fontWeight: "bold", paddingBottom: "10px" }}
           >
             CPU
+            <TextField
+              label="Search"
+              sx={{ width: "250px", marginLeft: "700px" }}
+              InputProps={{
+                endAdornment: <SearchIcon />,
+              }}
+            />
           </Typography>
           <Paper
             sx={{

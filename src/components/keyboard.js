@@ -8,8 +8,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+
 import Sidebar from "./Sidebar";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, TextField } from "@mui/material";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -49,6 +51,13 @@ export default function Keyboard() {
             sx={{ fontSize: "30px", fontWeight: "bold", paddingBottom: "10px" }}
           >
             Keyboard
+            <TextField
+              label="Search"
+              sx={{ width: "250px", marginLeft: "700px" }}
+              InputProps={{
+                endAdornment: <SearchIcon />,
+              }}
+            />
           </Typography>
           <Paper
             sx={{

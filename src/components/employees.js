@@ -8,10 +8,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import axios from "axios";
+import SearchIcon from "@mui/icons-material/Search";
 import { api_url } from "../apiutils";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, TextField } from "@mui/material";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -60,6 +61,13 @@ export default function Employees() {
             sx={{ fontSize: "30px", fontWeight: "bold", paddingBottom: "10px" }}
           >
             Employees
+            <TextField
+              label="Search"
+              sx={{ width: "250px", marginLeft: "700px" }}
+              InputProps={{
+                endAdornment: <SearchIcon />,
+              }}
+            />
           </Typography>
           <Paper
             sx={{

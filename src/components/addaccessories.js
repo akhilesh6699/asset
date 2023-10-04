@@ -9,11 +9,13 @@ import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import axios from "axios";
 import { api_url } from "../apiutils";
+import { toast } from "react-toastify";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,20 +44,69 @@ const filteredUsers = [
 ];
 
 export default function AddAccessories() {
-  const addAccessories = async (name) => {
-    if (name === "Monitor") {
-      let response = await axios.post(`${api_url}assign-monitor-id`);
-    } else if (name == "CPU") {
-      let response = await axios.post(`${api_url}assign-cpu-id`);
-    } else if (name == "Mouse") {
-      let response = await axios.post(`${api_url}assign-mouse-id`);
-    } else if (name == "Keyboard") {
-      let response = await axios.post(`${api_url}assign-keyboard-id`);
-    } else if (name == "Chairs") {
-      let response = await axios.post(`${api_url}assign-chair-id`);
+  // const addAccessories = async (name) => {
+  //   if (name === "Monitor") {
+  //     let response = await axios.post(`${api_url}assign-monitor-id`);
+  //   } else if (name == "CPU") {
+  //     let response = await axios.post(`${api_url}assign-cpu-id`);
+  //   } else if (name == "Mouse") {
+  //     let response = await axios.post(`${api_url}assign-mouse-id`);
+  //   } else if (name == "Keyboard") {
+  //     let response = await axios.post(`${api_url}assign-keyboard-id`);
+  //   } else if (name == "Chairs") {
+  //     let response = await axios.post(`${api_url}assign-chair-id`);
+  //   }
+
+  // let response = await axios.post(`${api_url}add`);
+
+  // };
+
+  const navigate = useNavigate();
+  const [accessaryName, setAccessaryName] = React.useState("");
+  const [quantity, setQuantity] = React.useState(1);
+
+  const addAccessories = async () => {
+    try {
+      const data = {
+        accessaryName: accessaryName, // Assuming accessaryName is defined elsewhere
+      };
+      let response = await axios.post(`${api_url}add-accessaries`, data);
+      console.log(response);
+      toast.success("added");
+    } catch (err) {
+      console.log("err", err);
     }
   };
-  const navigate = useNavigate();
+
+  const [assets, setAssets] = React.useState([]);
+  const getAssets = async () => {
+    let response = await axios.get(`${api_url}get-accessaries`);
+    console.log(response);
+    setAssets(response.data?.accessaries);
+  };
+  React.useEffect(() => {
+    getAssets();
+  }, []);
+
+  // const [addAsset, setAddAsset] = React.useState([]);
+  // const getAddAsset = async () => {
+  //   let response = await axios.post(`${api_url}store-assets`);
+  //   console.log(response);
+  // };
+
+  const updateAssets = async () => {
+    try {
+      const data = {
+        quantity: quantity, // Add quantity to the data
+      };
+      let response = await axios.post(`${api_url}store-assets`, data);
+      console.log(response);
+      toast.success("added");
+    } catch (err) {
+      console.log("err", err);
+    }
+  };
+
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -66,6 +117,40 @@ export default function AddAccessories() {
             sx={{ fontSize: "30px", fontWeight: "bold", paddingBottom: "10px" }}
           >
             Add Accessories
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: "medium",
+                paddingTop: "20px",
+                paddingBottom: "20px",
+                paddingRight: "50px",
+              }}
+            >
+              <TextField
+                label="Enter Asset name"
+                size="small"
+                sx={{ width: "250px" }}
+                value={accessaryName}
+                onChange={(e) => setAccessaryName(e.target.value)}
+              />
+              <Button
+                sx={{
+                  bgcolor: "green",
+                  color: "white",
+                  marginLeft: "30px",
+                  fontSize: "10px",
+                  padding: "10px",
+                  fontWeight: "medium",
+                  transition: "background-color 0.3s",
+                  "&:hover": {
+                    backgroundColor: "#E65100",
+                  },
+                }}
+                onClick={addAccessories}
+              >
+                ADD
+              </Button>
+            </Typography>
           </Typography>
           <Paper
             sx={{
@@ -90,27 +175,37 @@ export default function AddAccessories() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredUsers.map((row) => {
+                  {assets.map((row) => {
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>
                         <StyledTableCell align="left">
-                          {row.name}
+                          {row.accessaryName}
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
                           sx={{ display: "flex", cursor: "pointer" }}
                         >
-                          <RemoveIcon
+                          {/* <RemoveIcon
                             onClick={() => {
                               navigate("/addaccessories");
-                            }}
-                          />
-                          <Typography px={2}>1</Typography>
+                            }} */}
+                          {/* /> */}
+                          <Typography px={2}>{quantity}</Typography>
                           <AddIcon
                             onClick={() => {
+                              setQuantity(quantity + 1); // Increment the quantity
+                              updateAssets(); // Call the function to add the accessory
+                            }}
+                          />
+                          <DeleteIcon
+                            sx={{
+                              display: "flex",
+                              cursor: "pointer",
+                              marginLeft: "150px",
+                            }}
+                            onClick={() => {
                               navigate("/addaccessories");
-                              addAccessories(row.name);
                             }}
                           />
                         </StyledTableCell>
