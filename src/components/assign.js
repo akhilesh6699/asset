@@ -10,7 +10,7 @@ import axios from "axios";
 import { api_url } from "../apiutils";
 export default function Assign() {
   const [name, setName] = React.useState("");
-  const [accessorie, setAccessories] = React.useState("");
+  const [accessory, setAccessories] = React.useState("");
   const handleChange = (event) => {
     setName(event.target.value);
   };
@@ -20,9 +20,9 @@ export default function Assign() {
 
   const [assets, setAssets] = React.useState([]);
   const getAssets = async () => {
-    let response = await axios.get(`${api_url}get-accessaries`);
+    let response = await axios.get(`${api_url}get-accessories`);
     console.log(response);
-    setAssets(response.data?.accessaries);
+    setAssets(response.data?.accessories);
   };
   React.useEffect(() => {
     getAssets();
@@ -75,13 +75,13 @@ export default function Assign() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={accessorie}
+            value={accessory}
             label="Assets"
             onChange={handleChange1}
           >
             {assets.map((asset) => (
-              <MenuItem key={asset._id} value={asset.accessaryName}>
-                {asset.accessaryName}
+              <MenuItem key={asset._id} value={asset.accessoryName}>
+                {asset.accessoryName}
               </MenuItem>
             ))}
           </Select>
@@ -94,7 +94,7 @@ export default function Assign() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={accessorie}
+            value={accessory}
             label="Asset_ID"
             onChange={handleChange1}
           >
@@ -113,7 +113,7 @@ export default function Assign() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={accessorie}
+            value={accessory}
             label="Mouse"
             onChange={handleChange1}
           >
@@ -132,7 +132,7 @@ export default function Assign() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={accessorie}
+            value={accessory}
             label="Keyboard"
             onChange={handleChange1}
           >
@@ -151,7 +151,7 @@ export default function Assign() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={accessorie}
+            value={accessory}
             label="Chairs"
             onChange={handleChange1}
           >

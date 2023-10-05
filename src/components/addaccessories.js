@@ -16,6 +16,7 @@ import axios from "axios";
 import { api_url } from "../apiutils";
 import { toast } from "react-toastify";
 import DeleteIcon from "@mui/icons-material/Delete";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -72,7 +73,12 @@ export default function AddAccessories() {
       };
       let response = await axios.post(`${api_url}add-accessories`, data);
       console.log(response);
+
       toast.success("added");
+      // Reload the page after successfully adding an accessory
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     } catch (err) {
       console.log("err", err);
     }
@@ -169,6 +175,7 @@ export default function AddAccessories() {
               >
                 <TableHead>
                   <TableRow>
+                    <StyledTableCell align="left">SL. No</StyledTableCell>
                     <StyledTableCell align="left">
                       Accessories Name
                     </StyledTableCell>
@@ -176,10 +183,13 @@ export default function AddAccessories() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {assets.map((row) => {
+                  {assets.map((row, index) => {
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>
+                        <StyledTableCell component="th" scope="row">
+                          {index + 1}
+                        </StyledTableCell>
                         <StyledTableCell align="left">
                           {row.accessoryName}
                         </StyledTableCell>
@@ -187,26 +197,24 @@ export default function AddAccessories() {
                           align="left"
                           sx={{ display: "flex", cursor: "pointer" }}
                         >
-                          {/* <RemoveIcon
-                            onClick={() => {
-                              navigate("/addaccessories");
-                            }} */}
-                          {/* /> */}
-                          <Typography px={2}>{quantity}</Typography>
-                          <AddIcon
-                            onClick={() => {
-                              setQuantity(quantity + 1); // Increment the quantity
-                              updateAssets(); // Call the function to add the accessory
-                            }}
-                          />
-                          <DeleteIcon
+                          <InfoOutlinedIcon
                             sx={{
                               display: "flex",
                               cursor: "pointer",
-                              marginLeft: "150px",
+                              marginRight: "100px",
                             }}
                             onClick={() => {
-                              navigate("/addaccessories");
+                              if (row.name === "Monitor") {
+                                navigate("/monitor");
+                              } else if (row.name === "CPU") {
+                                navigate("/cpu");
+                              } else if (row.name === "Mouse") {
+                                navigate("/mouse");
+                              } else if (row.name === "Keyboard") {
+                                navigate("/keyboard");
+                              } else if (row.name === "Chairs") {
+                                navigate("/chairs");
+                              }
                             }}
                           />
                         </StyledTableCell>
