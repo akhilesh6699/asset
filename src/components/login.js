@@ -140,10 +140,10 @@ const Login = () => {
           fullWidth
           required
         /> */}
-        <FormControlLabel
+        {/* <FormControlLabel
           control={<Checkbox name="checkedB" color="primary" />}
           label="Remember me"
-        />
+        /> */}
         <Button
           sx={{
             marginBottom: "30px",

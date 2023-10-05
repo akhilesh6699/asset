@@ -8,6 +8,7 @@ import { Box, Button, TextField, Typography, Grid } from "@mui/material";
 import { api_url } from "../apiutils";
 import axios from "axios";
 import { toast } from "react-toastify";
+import validator from "validator";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -32,22 +33,32 @@ export default function AddEmployees() {
   const [name, setName] = React.useState();
   const [email, setEmail] = React.useState();
   const [phoneNumber, setPhoneNumber] = React.useState();
-
   const addEmployees = async () => {
-    console.log("hello");
+    if (!name || !email || !phoneNumber) {
+      toast.error("Please fill in all fields.");
+    } else if (validator.isEmail(email)) {
+      // Check if phoneNumber has exactly 10 digits
+      if (/^\d{10}$/.test(phoneNumber)) {
+        console.log("hello");
 
-    const formData = {
-      name: name,
-      email: email,
-      phone: phoneNumber,
-    };
-    let response = await axios.post(`${api_url}employee/store`, formData);
-    console.log(response);
-    toast.success("Emplyoee added successfully.");
-    // navigate("/employees");
-    setName("");
-    setEmail("");
-    setPhoneNumber("");
+        const formData = {
+          name: name,
+          email: email,
+          phone: phoneNumber,
+        };
+        let response = await axios.post(`${api_url}employee/store`, formData);
+        console.log(response);
+        toast.success("Employee added successfully.");
+        // navigate("/employees");
+        setName("");
+        setEmail("");
+        setPhoneNumber("");
+      } else {
+        toast.warning("Phone number must be 10 digits.");
+      }
+    } else {
+      toast.warning("Enter a valid email.");
+    }
   };
 
   return (
