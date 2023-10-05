@@ -64,21 +64,28 @@ export default function AddAccessories() {
 
   const navigate = useNavigate();
   const [accessoryName, setAccessoryName] = React.useState("");
-  const [quantity, setQuantity] = React.useState(1);
-
+  //const [quantity, setQuantity] = React.useState(1);
   const addAccessories = async () => {
     try {
-      const data = {
-        accessoryName: accessoryName, // Assuming accessoryName is defined elsewhere
-      };
-      let response = await axios.post(`${api_url}add-accessories`, data);
-      console.log(response);
+      // Check if the accessory name already exists in the assets array
+      if (assets.some((asset) => asset.accessoryName === accessoryName)) {
+        // If it exists, display an alert message
+        alert("Accessory name already exists!");
+      } else {
+        // If it doesn't exist, proceed with adding the accessory
+        const data = {
+          accessoryName: accessoryName,
+        };
+        let response = await axios.post(`${api_url}add-accessories`, data);
+        console.log(response);
 
-      toast.success("added");
-      // Reload the page after successfully adding an accessory
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+        toast.success("added");
+
+        // Reload the page after successfully adding an accessory
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      }
     } catch (err) {
       console.log("err", err);
     }
@@ -101,18 +108,18 @@ export default function AddAccessories() {
   //   console.log(response);
   // };
 
-  const updateAssets = async () => {
-    try {
-      const data = {
-        quantity: quantity, // Add quantity to the data
-      };
-      let response = await axios.post(`${api_url}store-assets`, data);
-      console.log(response);
-      toast.success("added");
-    } catch (err) {
-      console.log("err", err);
-    }
-  };
+  // const updateAssets = async () => {
+  //   try {
+  //     const data = {
+  //       quantity: quantity, // Add quantity to the data
+  //     };
+  //     let response = await axios.post(`${api_url}store-assets`, data);
+  //     console.log(response);
+  //     toast.success("added");
+  //   } catch (err) {
+  //     console.log("err", err);
+  //   }
+  // };
 
   return (
     <div>
