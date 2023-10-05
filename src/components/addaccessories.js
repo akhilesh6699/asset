@@ -70,7 +70,7 @@ export default function AddAccessories() {
       // Check if the accessory name already exists in the assets array
       if (assets.some((asset) => asset.accessoryName === accessoryName)) {
         // If it exists, display an alert message
-        alert("Accessory name already exists!");
+        toast.error("Accessory name already exists!");
       } else {
         // If it doesn't exist, proceed with adding the accessory
         const data = {
