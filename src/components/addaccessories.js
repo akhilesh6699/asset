@@ -62,15 +62,15 @@ export default function AddAccessories() {
   // };
 
   const navigate = useNavigate();
-  const [accessaryName, setAccessaryName] = React.useState("");
+  const [accessoryName, setAccessoryName] = React.useState("");
   const [quantity, setQuantity] = React.useState(1);
 
   const addAccessories = async () => {
     try {
       const data = {
-        accessaryName: accessaryName, // Assuming accessaryName is defined elsewhere
+        accessoryName: accessoryName, // Assuming accessoryName is defined elsewhere
       };
-      let response = await axios.post(`${api_url}add-accessaries`, data);
+      let response = await axios.post(`${api_url}add-accessories`, data);
       console.log(response);
       toast.success("added");
     } catch (err) {
@@ -80,9 +80,10 @@ export default function AddAccessories() {
 
   const [assets, setAssets] = React.useState([]);
   const getAssets = async () => {
-    let response = await axios.get(`${api_url}get-accessaries`);
+    let response = await axios.get(`${api_url}get-accessories`);
     console.log(response);
-    setAssets(response.data?.accessaries);
+    console.log();
+    setAssets(response.data?.accessories);
   };
   React.useEffect(() => {
     getAssets();
@@ -130,8 +131,8 @@ export default function AddAccessories() {
                 label="Enter Asset name"
                 size="small"
                 sx={{ width: "250px" }}
-                value={accessaryName}
-                onChange={(e) => setAccessaryName(e.target.value)}
+                value={accessoryName}
+                onChange={(e) => setAccessoryName(e.target.value)}
               />
               <Button
                 sx={{
@@ -180,7 +181,7 @@ export default function AddAccessories() {
                     return (
                       <StyledTableRow key={row._id}>
                         <StyledTableCell align="left">
-                          {row.accessaryName}
+                          {row.accessoryName}
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
