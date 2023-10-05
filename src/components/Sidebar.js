@@ -167,10 +167,11 @@ const Sidebar = () => {
           : { ...item, open: !prevItem?.open }
       );
     } else {
+      // to protect the routes after logging  out
       setSelectedItem(item);
       if (item.path === "/") {
         localStorage.removeItem("token");
-        localStorage.removeItem("isLoggedin");
+        localStorage.removeItem("isLoggedIn");
         navigate(item.path);
       } else {
         navigate(item.path);

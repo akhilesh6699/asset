@@ -33,6 +33,7 @@ export default function AddEmployees() {
   const [name, setName] = React.useState();
   const [email, setEmail] = React.useState();
   const [phoneNumber, setPhoneNumber] = React.useState();
+  const [isSubmit, setIsSubmit] = React.useState(false);
   const addEmployees = async () => {
     if (!name || !email || !phoneNumber) {
       toast.error("Please fill in all fields.");
@@ -50,6 +51,7 @@ export default function AddEmployees() {
         console.log(response);
         toast.success("Employee added successfully.");
         // navigate("/employees");
+        setIsSubmit(true);
         setName("");
         setEmail("");
         setPhoneNumber("");
@@ -89,7 +91,10 @@ export default function AddEmployees() {
             <TextField
               sx={{ width: "500px" }}
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setIsSubmit(false);
+              }}
             />
           </Box>
           <Box display="flex" flexDirection="row" alignItems="center" mt={2}>
@@ -133,7 +138,7 @@ export default function AddEmployees() {
           >
             <Button
               sx={{
-                bgcolor: "green",
+                bgcolor: isSubmit ? "#e0e0e0" : "green",
                 color: "white",
                 paddingLeft: "30px",
                 paddingRight: "30px",
@@ -147,6 +152,7 @@ export default function AddEmployees() {
                 },
               }}
               onClick={addEmployees}
+              disabled={isSubmit}
             >
               Submit
             </Button>

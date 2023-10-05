@@ -45,6 +45,7 @@ const Login = () => {
         let response = await axios.post(`${api_url}login`, inputData);
         //axios used to connect with the api url
         console.log(response.data);
+        localStorage.setItem("isLoggedIn", true);
         navigate("/dashboard");
         toast.success("logged in successfully!!");
       }

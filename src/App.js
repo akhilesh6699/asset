@@ -7,7 +7,6 @@ import Dashboard from "./components/dashboard";
 import Accessories from "./components/accessories";
 import NotAssignedAccessories from "./components/notassignedaccessories";
 import AssignedAccessories from "./components/assignedaccessories";
-
 import AddEmployees from "./components/addemployees";
 import AddAccessories from "./components/addaccessories";
 import Assign from "./components/assign";
@@ -17,6 +16,7 @@ import CPU from "./components/cpu";
 import Mouse from "./components/mouse";
 import Keyboard from "./components/keyboard";
 import Chairs from "./components/chairs";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // for alert styling
@@ -31,10 +31,24 @@ function App() {
           <Route path="/" element={<Login />} />
         </Routes>
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoutes>
+                <Dashboard />
+              </ProtectedRoutes>
+            }
+          />
         </Routes>
         <Routes>
-          <Route path="/employees" element={<Employees />} />
+          <Route
+            path="/employees"
+            element={
+              <ProtectedRoutes>
+                <Employees />{" "}
+              </ProtectedRoutes>
+            }
+          />
         </Routes>
         <Routes>
           <Route path="/accessories" element={<Accessories />} />
