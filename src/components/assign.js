@@ -11,24 +11,31 @@ import { api_url } from "../apiutils";
 export default function Assign() {
   const [name, setName] = React.useState("");
   const [accessory, setAccessories] = React.useState("");
+  const [ids, setIds] = React.useState([]);
+  const [emp, setEmp] = React.useState([]);
+  const [assignedId, setAssignedId] = React.useState();
   const handleChange = (event) => {
     setName(event.target.value);
   };
-  const handleChange1 = (event) => {
+  const handleChange1 = async (event) => {
     setAccessories(event.target.value);
+    let response = await axios.get(`${api_url}assetIds/${event.target.value}`);
+    setIds(response?.data?.assetIds);
+  };
+  const handleChangeId = async (event) => {
+    setAssignedId(event.target.value);
   };
 
   const [assets, setAssets] = React.useState([]);
   const getAssets = async () => {
     let response = await axios.get(`${api_url}get-accessories`);
-    console.log(response);
+
     setAssets(response.data?.accessories);
   };
   React.useEffect(() => {
     getAssets();
   }, []);
 
-  const [emp, setEmp] = React.useState([]);
   const getEmp = async () => {
     let response = await axios.get(`${api_url}employee/show`);
     console.log(response);
@@ -94,15 +101,15 @@ export default function Assign() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={accessory}
+            value={assignedId}
             label="Asset_ID"
-            onChange={handleChange1}
+            onChange={handleChangeId}
           >
-            <MenuItem value={10}>Monitor</MenuItem>
-            <MenuItem value={20}>CPU</MenuItem>
-            <MenuItem value={30}>Mouse</MenuItem>
-            <MenuItem value={40}>Keyboard</MenuItem>
-            <MenuItem value={50}>Chairs</MenuItem>
+            {ids.map((id) => (
+              <MenuItem key={id} value={id}>
+                {id}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>{" "}
