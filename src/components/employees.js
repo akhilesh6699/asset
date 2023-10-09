@@ -13,6 +13,7 @@ import { api_url } from "../apiutils";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { Box, Typography, TextField } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -94,6 +95,7 @@ export default function Employees() {
                       Employee Email
                     </StyledTableCell>
                     <StyledTableCell align="left">Phone Number</StyledTableCell>
+                    <StyledTableCell align="left">Actions</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -109,12 +111,12 @@ export default function Employees() {
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"
-                          onClick={() => {
-                            navigate("/employeename");
-                          }}
-                          sx={{
-                            cursor: "pointer",
-                          }}
+                          // onClick={() => {
+                          //   navigate("/employeename");
+                          // }}
+                          // sx={{
+                          //   cursor: "pointer",
+                          // }}
                         >
                           {row.name}
                         </StyledTableCell>
@@ -123,6 +125,18 @@ export default function Employees() {
                         </StyledTableCell>
                         <StyledTableCell align="left">
                           {row.phone}
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="left"
+                          onClick={() => {
+                            navigate(`/employeedetails/${row.id}`);
+                          }}
+                          sx={{
+                            cursor: "pointer",
+                          }}
+                        >
+                          View
+                          <Visibility />
                         </StyledTableCell>
                       </StyledTableRow>
                     );

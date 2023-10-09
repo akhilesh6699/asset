@@ -14,6 +14,11 @@ export default function Assign() {
   const [ids, setIds] = React.useState([]);
   const [emp, setEmp] = React.useState([]);
   const [assignedId, setAssignedId] = React.useState();
+  const [EmpId, setEmpId] = React.useState();
+
+  const handleSubmit = async () => {
+    let response = await axios.post(`${api_url}assign/${name}`);
+  };
   const handleChange = (event) => {
     setName(event.target.value);
   };
@@ -193,6 +198,7 @@ export default function Assign() {
               backgroundColor: "#E65100",
             },
           }}
+          onClick={handleSubmit}
         >
           Submit
         </Button>

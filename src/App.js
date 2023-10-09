@@ -10,7 +10,6 @@ import AssignedAccessories from "./components/assignedaccessories";
 import AddEmployees from "./components/addemployees";
 import AddAccessories from "./components/addaccessories";
 import Assign from "./components/assign";
-import EmployeeName from "./components/employeename";
 import Monitor from "./components/monitor";
 import CPU from "./components/cpu";
 import Mouse from "./components/mouse";
@@ -21,6 +20,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // for alert styling
 import Employees from "./components/employees";
+import EmployeeDetails from "./components/employeedetails";
 function App() {
   return (
     <div className="App">
@@ -72,7 +72,7 @@ function App() {
           <Route path="/addaccessories" element={<AddAccessories />} />
         </Routes>
         <Routes>
-          <Route path="/employeename" element={<EmployeeName />} />
+          <Route path="/employeedetails/:id" element={<EmployeeDetails />} />
         </Routes>
         <Routes>
           <Route path="/monitor" element={<Monitor />} />
