@@ -15,7 +15,7 @@ const size = {
 function Dashboard() {
   const [empCount, SetempCount] = useState([]);
   const employeeCount = async (e) => {
-    let response = await axios.get(`${api_url}employee/show`);
+    let response = await axios.get(`${api_url}show-all-employee`);
     //axios used to connect with the api url
     SetempCount(response.data?.employees);
     console.log("data", response.data?.employees);

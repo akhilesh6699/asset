@@ -47,7 +47,7 @@ export default function AddEmployees() {
           email: email,
           phone: phoneNumber,
         };
-        let response = await axios.post(`${api_url}employee/store`, formData);
+        let response = await axios.post(`${api_url}add-employee`, formData);
         console.log(response);
         toast.success("Employee added successfully.");
         // navigate("/employees");

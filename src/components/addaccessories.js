@@ -74,9 +74,9 @@ export default function AddAccessories() {
       } else {
         // If it doesn't exist, proceed with adding the accessory
         const data = {
-          accessoryName: accessoryName,
+          assetName: accessoryName, //backend:frontend
         };
-        let response = await axios.post(`${api_url}add-accessories`, data);
+        let response = await axios.post(`${api_url}add-asset-names`, data);
         console.log(response);
 
         toast.success("added");
@@ -93,10 +93,10 @@ export default function AddAccessories() {
 
   const [assets, setAssets] = React.useState([]);
   const getAssets = async () => {
-    let response = await axios.get(`${api_url}get-accessories`);
+    let response = await axios.get(`${api_url}get-asset-names`);
     console.log(response);
     console.log();
-    setAssets(response.data?.accessories);
+    setAssets(response.data?.assets);
   };
   React.useEffect(() => {
     getAssets();
@@ -198,7 +198,7 @@ export default function AddAccessories() {
                           {index + 1}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.accessoryName}
+                          {row.assetName}
                         </StyledTableCell>
                         <StyledTableCell
                           align="left"

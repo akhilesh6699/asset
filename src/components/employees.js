@@ -45,7 +45,7 @@ export default function Employees() {
   const navigate = useNavigate();
   const [employees, setEmployees] = React.useState([]);
   const getEmployees = async () => {
-    let response = await axios.get(`${api_url}employee/show`);
+    let response = await axios.get(`${api_url}show-all-employee`);
     //console.log(response);
     setEmployees(response?.data?.employees);
   };

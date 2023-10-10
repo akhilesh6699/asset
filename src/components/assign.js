@@ -33,18 +33,18 @@ export default function Assign() {
 
   const [assets, setAssets] = React.useState([]);
   const getAssets = async () => {
-    let response = await axios.get(`${api_url}get-accessories`);
+    let response = await axios.get(`${api_url}get-asset-names`);
 
-    setAssets(response.data?.accessories);
+    setAssets(response.data?.assetName);
   };
   React.useEffect(() => {
     getAssets();
   }, []);
 
   const getEmp = async () => {
-    let response = await axios.get(`${api_url}employee/show`);
+    let response = await axios.get(`${api_url}show-all-employee`);
     console.log(response);
-    setEmp(response.data?.employees);
+    setEmp(response.data.employees);
   };
   React.useEffect(() => {
     getEmp();
