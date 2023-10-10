@@ -8,28 +8,28 @@ import Sidebar from "./Sidebar";
 import { Typography, Button } from "@mui/material";
 import axios from "axios";
 import { api_url } from "../apiutils";
+import { useState } from "react";
 export default function Assign() {
   const [name, setName] = React.useState("");
   const [accessory, setAccessories] = React.useState("");
   const [ids, setIds] = React.useState([]);
   const [emp, setEmp] = React.useState([]);
   const [assignedId, setAssignedId] = React.useState();
-  const [EmpId, setEmpId] = React.useState();
+  const [empId, setEmpId] = React.useState();
+  const [assetId, setAssetId] = useState();
 
-  const handleSubmit = async () => {
-    let response = await axios.post(`${api_url}assign/${name}`);
-  };
   const handleChange = (event) => {
     setName(event.target.value);
   };
+
   const handleChange1 = async (event) => {
     setAccessories(event.target.value);
     let response = await axios.get(`${api_url}assetIds/${event.target.value}`);
     setIds(response?.data?.assetIds);
   };
-  const handleChangeId = async (event) => {
-    setAssignedId(event.target.value);
-  };
+  // const handleChangeId = async (event) => {
+  //   setAssignedId(event.target.value);
+  // };
 
   const [assets, setAssets] = React.useState([]);
   const getAssets = async () => {
@@ -49,6 +49,15 @@ export default function Assign() {
   React.useEffect(() => {
     getEmp();
   }, []);
+
+  console.log(empId);
+  console.log(assets);
+  const handleSubmit = async () => {
+    let response = await axios.post(`${api_url}assign-assets/${empId}`, {
+      assetId: assetId,
+    });
+    console.log("response assign", response);
+  };
   return (
     <Box sx={{ marginLeft: "350px" }}>
       <Sidebar />
@@ -73,7 +82,11 @@ export default function Assign() {
             onChange={handleChange}
           >
             {emp.map((emps) => (
-              <MenuItem key={emps._id} value={emps.name}>
+              <MenuItem
+                key={emps._id}
+                value={emps.name}
+                onClick={() => setEmpId(emps?.employeeId)}
+              >
                 {emps.name}
               </MenuItem>
             ))}
@@ -108,10 +121,14 @@ export default function Assign() {
             id="demo-simple-select"
             value={assignedId}
             label="Asset_ID"
-            onChange={handleChangeId}
+            // onChange={handleChangeId}
           >
             {ids.map((id) => (
-              <MenuItem key={id} value={id}>
+              <MenuItem
+                key={id}
+                value={id}
+                onClick={() => setAssetId(id?.assetIds)}
+              >
                 {id}
               </MenuItem>
             ))}
