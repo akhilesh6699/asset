@@ -129,7 +129,7 @@ export default function Employees() {
                         <StyledTableCell
                           align="left"
                           onClick={() => {
-                            navigate(`/employeedetails/${row.id}`);
+                            navigate(`/employeedetails/${row._id}`);
                           }}
                           sx={{
                             cursor: "pointer",

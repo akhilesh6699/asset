@@ -24,8 +24,11 @@ export default function Assign() {
 
   const handleChange1 = async (event) => {
     setAccessories(event.target.value);
-    let response = await axios.get(`${api_url}assetIds/${event.target.value}`);
+    let response = await axios.get(
+      `${api_url}asset-name/${event.target.value}`
+    );
     setIds(response?.data?.assetIds);
+    console.log("assets", response.data.assetIds);
   };
   // const handleChangeId = async (event) => {
   //   setAssignedId(event.target.value);
@@ -33,9 +36,10 @@ export default function Assign() {
 
   const [assets, setAssets] = React.useState([]);
   const getAssets = async () => {
-    let response = await axios.get(`${api_url}get-asset-names`);
+    let response = await axios.get(`${api_url}get-assets`);
 
-    setAssets(response.data?.assetName);
+    setAssets(response.data?.assets);
+    console.log(response.data?.assets);
   };
   React.useEffect(() => {
     getAssets();
@@ -51,11 +55,12 @@ export default function Assign() {
   }, []);
 
   console.log(empId);
-  console.log(assets);
+  console.log(assetId);
   const handleSubmit = async () => {
     let response = await axios.post(`${api_url}assign-assets/${empId}`, {
       assetId: assetId,
     });
+
     console.log("response assign", response);
   };
   return (
@@ -105,8 +110,8 @@ export default function Assign() {
             onChange={handleChange1}
           >
             {assets.map((asset) => (
-              <MenuItem key={asset._id} value={asset.accessoryName}>
-                {asset.accessoryName}
+              <MenuItem key={asset._id} value={asset.assetName}>
+                {asset.assetName}
               </MenuItem>
             ))}
           </Select>
@@ -124,11 +129,7 @@ export default function Assign() {
             // onChange={handleChangeId}
           >
             {ids.map((id) => (
-              <MenuItem
-                key={id}
-                value={id}
-                onClick={() => setAssetId(id?.assetIds)}
-              >
+              <MenuItem key={id} value={id} onClick={() => setAssetId(id)}>
                 {id}
               </MenuItem>
             ))}

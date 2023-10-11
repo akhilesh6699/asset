@@ -39,13 +39,14 @@ const filteredUsers = [
   { name: "Keyboard", totalcount: "25", assigned: "0", notassigned: "4" },
   { name: "Chairs", totalcount: "25", assigned: "0", notassigned: "4" },
 ];
+
 export default function Accessories() {
   const navigate = useNavigate();
   const [accessories, setAccessories] = React.useState([]);
   const getAccessories = async () => {
-    let response = await axios.get(`${api_url}total-monitors`);
+    let response = await axios.get(`${api_url}get-asset-names`);
     console.log(response);
-    setAccessories(response?.data?.accessories);
+    setAccessories(response?.data?.assets);
   };
   React.useEffect(() => {
     getAccessories();
@@ -94,7 +95,7 @@ export default function Accessories() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredUsers.map((row, index) => {
+                  {accessories.map((row, index) => {
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>
@@ -117,10 +118,10 @@ export default function Accessories() {
                             }
                           }}
                         >
-                          {row.name}
+                          {row?.assetName}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.totalcount}
+                          {row?.totalcount}
                         </StyledTableCell>
                         <StyledTableCell align="left">
                           {row.assigned}
