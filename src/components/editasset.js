@@ -7,13 +7,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import axios from "axios";
-import SearchIcon from "@mui/icons-material/Search";
-import { api_url } from "../apiutils";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Box, Typography, TextField } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
+import { Box, Typography, TextField, Button } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import Switch from "@mui/material/Switch";
+import { green, red } from "@mui/material/colors";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -32,28 +31,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     borderBottom: 0,
   },
 }));
-
-// const filteredUsers = [
-//   {
-//     id: "2341",
-//     name: "vinay",
-//     email: "egafgaf@gmail.com",
-//     number: "9897968564",
-//   },
-// ];
-export default function Employees() {
-  const navigate = useNavigate();
-  const [employees, setEmployees] = React.useState([]);
-  const getEmployees = async () => {
-    let response = await axios.get(`${api_url}show-all-employee`);
-    //console.log(response);
-    setEmployees(response?.data?.employees);
+const filteredUsers = [
+  {
+    name: "vinay",
+    id: "2341",
+    monitor: "25",
+  },
+];
+export default function EditAsset() {
+  const [checked, setChecked] = React.useState(true);
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
   };
-
-  React.useEffect(() => {
-    getEmployees();
-    // getEmpDetails();
-  }, []);
+  const navigate = useNavigate();
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -61,12 +51,33 @@ export default function Employees() {
         <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
           <Box height={80} />
           <Typography
-            sx={{ fontSize: "30px", fontWeight: "bold", paddingBottom: "10px" }}
+            sx={{
+              fontSize: "30px",
+              fontWeight: "bold",
+              paddingBottom: "10px",
+              paddingLeft: "10px",
+            }}
           >
-            Employees
+            Monitor
+            <Button
+              sx={{
+                bgcolor: "green",
+                color: "white",
+                marginLeft: "80px",
+                fontSize: "10px",
+                padding: "10px",
+                fontWeight: "medium",
+                transition: "background-color 0.3s",
+                "&:hover": {
+                  backgroundColor: "#E65100",
+                },
+              }}
+            >
+              Add
+            </Button>
             <TextField
               label="Search"
-              sx={{ width: "250px", marginLeft: "700px" }}
+              sx={{ width: "250px", marginLeft: "600px" }}
               InputProps={{
                 endAdornment: <SearchIcon />,
               }}
@@ -89,19 +100,18 @@ export default function Employees() {
                 <TableHead>
                   <TableRow>
                     <StyledTableCell>Sl. no</StyledTableCell>
-                    <StyledTableCell align="left">Employee ID</StyledTableCell>
+                    <StyledTableCell align="left">Monitor ID</StyledTableCell>
                     <StyledTableCell align="left">
                       Employee Name
                     </StyledTableCell>
+                    <StyledTableCell align="left">Employee ID</StyledTableCell>
                     <StyledTableCell align="left">
-                      Employee Email
+                      Enable/Disable
                     </StyledTableCell>
-                    <StyledTableCell align="left">Phone Number</StyledTableCell>
-                    <StyledTableCell align="left">Actions</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {employees.map((row, index) => {
+                  {filteredUsers.map((row, index) => {
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>
@@ -109,37 +119,26 @@ export default function Employees() {
                           {index + 1}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.employeeId}
+                          {row.monitor}
                         </StyledTableCell>
-                        <StyledTableCell
-                          align="left"
-                          // onClick={() => {
-                          //   navigate("/employeename");
-                          // }}
-                          // sx={{
-                          //   cursor: "pointer",
-                          // }}
-                        >
+                        <StyledTableCell align="left">
                           {row.name}
                         </StyledTableCell>
-                        <StyledTableCell align="left">
-                          {row.email}
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          {row.phone}
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="left"
-                          onClick={() => {
-                            navigate(`/employeedetails/${row.employeeId}`);
-                          }}
+                        <StyledTableCell align="left">{row.id}</StyledTableCell>
+                        <Switch
+                          inputProps={{ "aria-label": "controlled" }}
+                          color={checked ? "primary" : "secondary"}
                           sx={{
-                            cursor: "pointer",
+                            "& .MuiSwitch-thumb": {
+                              backgroundColor: checked ? green[500] : red[500],
+                            },
+                            "& .MuiSwitch-track": {
+                              backgroundColor: checked ? green[500] : red[500],
+                            },
                           }}
-                        >
-                          View
-                          <Visibility />
-                        </StyledTableCell>
+                          checked={checked}
+                          onChange={handleChange}
+                        />
                       </StyledTableRow>
                     );
                   })}

@@ -8,7 +8,9 @@ import TableRow from "@mui/material/TableRow";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import axios from "axios";
+import { api_url } from "../apiutils";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -40,7 +42,18 @@ const filteredUsers = [
 ];
 export default function EmployeeDetails() {
   const navigate = useNavigate();
-  const params = useParams();
+  const { id } = useParams();
+  const [empDetails, SetEmpDetails] = React.useState();
+  const getEmpDetails = async () => {
+    let response = await axios.get(`${api_url}show-employee/${id}`);
+    console.log(response.data?.employee);
+    console.log(id);
+    SetEmpDetails(response?.data?.employee);
+  };
+
+  React.useEffect(() => {
+    getEmpDetails();
+  }, []);
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -56,61 +69,64 @@ export default function EmployeeDetails() {
           >
             Employee Details
           </Typography>
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 700, boxShadow: "none" }}
-              aria-label="customized table"
-            >
-              <TableHead>
-                <TableRow>
-                  {/* <StyledTableCell>Sl. no</StyledTableCell>
-                    <StyledTableCell align="left">Emp Name</StyledTableCell>
-                    <StyledTableCell align="left">
-                      Emp ID
-                    </StyledTableCell>
-                    <StyledTableCell align="left">
-                      Email
-                    </StyledTableCell>
-                    <StyledTableCell align="left">Ph No</StyledTableCell>
-                    <StyledTableCell align="left">Monitor_No</StyledTableCell>
-                    <StyledTableCell align="left">Cpu_No</StyledTableCell>
-                    <StyledTableCell align="left">Keyboard_No</StyledTableCell>
-                    <StyledTableCell align="left">Mouse_No</StyledTableCell>
-                    <StyledTableCell align="left">Chairs_No</StyledTableCell> */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredUsers.map((row, index) => {
-                  const currentRowId = row.id;
-                  return (
-                    <StyledTableRow key={row._id}>
-                      <StyledTableCell align="left">{row.name}</StyledTableCell>
-                      <StyledTableCell align="left">{row.id}</StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.email}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.number}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.monitor}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">{row.cpu}</StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.mouse}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.keyboard}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">
-                        {row.chairs}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Box>
+            <Grid container spacing={2}>
+              <Grid item sm={12}>
+                <Grid container>
+                  <Grid item sm={4}>
+                    Name:
+                  </Grid>
+                  <Grid item sm={4}>
+                    {empDetails?.name}
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item sm={12}>
+                <Grid container>
+                  <Grid item sm={4}>
+                    Employee ID:
+                  </Grid>
+                  <Grid item sm={4}>
+                    {empDetails?.employeeId}
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item sm={12}>
+                <Grid container>
+                  <Grid item sm={4}>
+                    Email ID:
+                  </Grid>
+                  <Grid item sm={4}>
+                    {empDetails?.email}
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item sm={12}>
+                <Grid container>
+                  <Grid item sm={4}>
+                    Phone No:
+                  </Grid>
+                  <Grid item sm={4}>
+                    {empDetails?.phone}
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item sm={12}>
+                <Grid container>
+                  <Grid item sm={4}>
+                    Assigned Assets:
+                  </Grid>
+                  <Grid item sm={4}>
+                    <ul>
+                      {empDetails?.assets.map((asset, index) => (
+                        <li key={index}>{asset}</li>
+                      ))}
+                    </ul>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
       </Box>
     </div>

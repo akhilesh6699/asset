@@ -67,6 +67,11 @@ export default function AddAccessories() {
   //const [quantity, setQuantity] = React.useState(1);
   const addAccessories = async () => {
     try {
+      if (!accessoryName) {
+        toast.error("Please enter the Asset Name");
+        return; // Exit the function to prevent further execution
+      }
+
       // Check if the accessory name already exists in the assets array
       if (assets.some((asset) => asset.accessoryName === accessoryName)) {
         // If it exists, display an alert message
@@ -211,17 +216,7 @@ export default function AddAccessories() {
                               marginRight: "100px",
                             }}
                             onClick={() => {
-                              if (row.name === "Monitor") {
-                                navigate("/monitor");
-                              } else if (row.name === "CPU") {
-                                navigate("/cpu");
-                              } else if (row.name === "Mouse") {
-                                navigate("/mouse");
-                              } else if (row.name === "Keyboard") {
-                                navigate("/keyboard");
-                              } else if (row.name === "Chairs") {
-                                navigate("/chairs");
-                              }
+                              navigate("/editasset");
                             }}
                           />
                         </StyledTableCell>

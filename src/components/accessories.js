@@ -121,13 +121,13 @@ export default function Accessories() {
                           {row?.assetName}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row?.totalcount}
+                          {row?.totalCount}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.assigned}
+                          {row.assignedCount}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.notassigned}
+                          {row.notAssignedCount}
                         </StyledTableCell>
                       </StyledTableRow>
                     );

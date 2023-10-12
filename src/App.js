@@ -21,6 +21,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // for alert styling
 import Employees from "./components/employees";
 import EmployeeDetails from "./components/employeedetails";
+import EditAsset from "./components/editasset";
 function App() {
   return (
     <div className="App">
@@ -73,6 +74,9 @@ function App() {
         </Routes>
         <Routes>
           <Route path="/employeedetails/:id" element={<EmployeeDetails />} />
+        </Routes>
+        <Routes>
+          <Route path="/editasset" element={<EditAsset />} />
         </Routes>
         <Routes>
           <Route path="/monitor" element={<Monitor />} />

@@ -36,10 +36,10 @@ export default function Assign() {
 
   const [assets, setAssets] = React.useState([]);
   const getAssets = async () => {
-    let response = await axios.get(`${api_url}get-assets`);
+    let response = await axios.get(`${api_url}get-asset-names`);
 
     setAssets(response.data?.assets);
-    console.log(response.data?.assets);
+    console.log(response.data);
   };
   React.useEffect(() => {
     getAssets();
@@ -56,12 +56,22 @@ export default function Assign() {
 
   console.log(empId);
   console.log(assetId);
-  const handleSubmit = async () => {
-    let response = await axios.post(`${api_url}assign-assets/${empId}`, {
-      assetId: assetId,
-    });
+  const handleSubmit = async (data) => {
+    if (!data.name) {
+      // Check if empId is empty or not selected
+      alert("Please select an employee.");
+      return;
+    } else if (!data.assetId) {
+      // Check if assetId is empty or not selected
+      alert("Please select an asset.");
+      return;
+    } else {
+      let response = await axios.post(`${api_url}assign-assets/${empId}`, {
+        assetId: assetId,
+      });
 
-    console.log("response assign", response);
+      console.log("response assign", response);
+    }
   };
   return (
     <Box sx={{ marginLeft: "350px" }}>
@@ -136,63 +146,6 @@ export default function Assign() {
           </Select>
         </FormControl>
       </Box>{" "}
-      {/* <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
-        <Box height={30} />
-        <FormControl sx={{ width: "350px" }}>
-          <InputLabel id="demo-simple-select-label">Mouse</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={accessory}
-            label="Mouse"
-            onChange={handleChange1}
-          >
-            <MenuItem value={10}>Monitor</MenuItem>
-            <MenuItem value={20}>CPU</MenuItem>
-            <MenuItem value={30}>Mouse</MenuItem>
-            <MenuItem value={40}>Keyboard</MenuItem>
-            <MenuItem value={50}>Chairs</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>{" "}
-      <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
-        <Box height={30} />
-        <FormControl sx={{ width: "350px" }}>
-          <InputLabel id="demo-simple-select-label">Keyboard</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={accessory}
-            label="Keyboard"
-            onChange={handleChange1}
-          >
-            <MenuItem value={10}>Monitor</MenuItem>
-            <MenuItem value={20}>CPU</MenuItem>
-            <MenuItem value={30}>Mouse</MenuItem>
-            <MenuItem value={40}>Keyboard</MenuItem>
-            <MenuItem value={50}>Chairs</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>{" "}
-      <Box component="main" sx={{ flexGrow: 1, p: 1 }}>
-        <Box height={30} />
-        <FormControl sx={{ width: "350px" }}>
-          <InputLabel id="demo-simple-select-label">Chairs</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={accessory}
-            label="Chairs"
-            onChange={handleChange1}
-          >
-            <MenuItem value={10}>Monitor</MenuItem>
-            <MenuItem value={20}>CPU</MenuItem>
-            <MenuItem value={30}>Mouse</MenuItem>
-            <MenuItem value={40}>Keyboard</MenuItem>
-            <MenuItem value={50}>Chairs</MenuItem>
-          </Select>
-        </FormControl>
-      </Box> */}
       <Box
         display="flex"
         justifyContent="center"
