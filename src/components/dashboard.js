@@ -7,6 +7,7 @@ import axios from "axios";
 import CountUp from "react-countup";
 import { api_url } from "../apiutils";
 import { useEffect, useState } from "react";
+import React from "react";
 
 const size = {
   width: 550,
@@ -24,6 +25,22 @@ function Dashboard() {
   useEffect(() => {
     employeeCount();
   }, []);
+
+  const [accessories, setAccessories] = React.useState([]);
+  const getAccessories = async () => {
+    let response = await axios.get(`${api_url}get-asset-names`);
+    console.log(response);
+    setAccessories(response?.data?.assets);
+  };
+  React.useEffect(() => {
+    getAccessories();
+  }, []);
+  console.log(accessories);
+
+  // Sum the totalCount values from the accessories array
+  const accessoriesTotalCount = accessories.reduce((total, accessory) => {
+    return total + accessory.totalCount;
+  }, 0);
 
   const data = [
     { value: 12, label: "Employees" },
@@ -119,7 +136,7 @@ function Dashboard() {
                           color: "#FFFFFF",
                         }}
                       >
-                        25
+                        <CountUp end={accessoriesTotalCount} duration={1} />
                       </Typography>
                     </Box>
                   </Grid>

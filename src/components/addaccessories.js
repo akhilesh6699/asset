@@ -216,7 +216,7 @@ export default function AddAccessories() {
                               marginRight: "100px",
                             }}
                             onClick={() => {
-                              navigate("/editasset");
+                              navigate(`/editasset/${row.assetName}`);
                             }}
                           />
                         </StyledTableCell>

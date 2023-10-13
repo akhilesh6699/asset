@@ -9,6 +9,7 @@ import { Typography, Button } from "@mui/material";
 import axios from "axios";
 import { api_url } from "../apiutils";
 import { useState } from "react";
+import { toast } from "react-toastify";
 export default function Assign() {
   const [name, setName] = React.useState("");
   const [accessory, setAccessories] = React.useState("");
@@ -56,21 +57,26 @@ export default function Assign() {
 
   console.log(empId);
   console.log(assetId);
-  const handleSubmit = async (data) => {
-    if (!data.name) {
-      // Check if empId is empty or not selected
-      alert("Please select an employee.");
+  const handleSubmit = async () => {
+    if (name === "") {
+      toast.warning("please enter the name");
       return;
-    } else if (!data.assetId) {
-      // Check if assetId is empty or not selected
-      alert("Please select an asset.");
-      return;
-    } else {
+    }
+    try {
       let response = await axios.post(`${api_url}assign-assets/${empId}`, {
         assetId: assetId,
       });
-
+      toast.success("Asset assigned successfully.");
+      setName("");
+      setAccessories("");
+      setAssignedId("");
       console.log("response assign", response);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong !");
     }
   };
   return (

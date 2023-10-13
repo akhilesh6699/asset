@@ -76,7 +76,7 @@ function App() {
           <Route path="/employeedetails/:id" element={<EmployeeDetails />} />
         </Routes>
         <Routes>
-          <Route path="/editasset" element={<EditAsset />} />
+          <Route path="/editasset/:name" element={<EditAsset />} />
         </Routes>
         <Routes>
           <Route path="/monitor" element={<Monitor />} />
