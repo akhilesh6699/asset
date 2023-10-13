@@ -42,12 +42,29 @@ function Dashboard() {
     return total + accessory.totalCount;
   }, 0);
 
+  const accessoriesAssignedCount = accessories.reduce((total, accessory) => {
+    return total + accessory.assignedCount;
+  }, 0);
+
+  const accessoriesNotAssignedCount = accessories.reduce((total, accessory) => {
+    return total + accessory.notAssignedCount;
+  }, 0);
   const data = [
     { value: 12, label: "Employees" },
     { value: 25, label: "Total Accessories" },
     { value: 10, label: "Assigned Accessories" },
     { value: 15, label: "Not Assigned Accessories" },
   ];
+
+  // const data = [
+  //   { value: {empCount.length}, label: "Employees" },
+  //   { value: { accessoriesTotalCount }, label: "Total Accessories" },
+  //   { value: { accessoriesAssignedCount }, label: "Assigned Accessories" },
+  //   {
+  //     value: { accessoriesNotAssignedCount },
+  //     label: "Not Assigned Accessories",
+  //   },
+  // ];
 
   const navigate = useNavigate();
   const cardInfo = [{ icon: <ArrowCircleRightIcon />, arrow: "Arrow" }];
@@ -83,7 +100,7 @@ function Dashboard() {
                           color: "#FFFFFF",
                         }}
                       >
-                        <CountUp end={empCount.length} duration={1} />
+                        <CountUp end={empCount.length} duration={3} />
                       </Typography>
                     </Box>
                   </Grid>
@@ -136,7 +153,7 @@ function Dashboard() {
                           color: "#FFFFFF",
                         }}
                       >
-                        <CountUp end={accessoriesTotalCount} duration={1} />
+                        <CountUp end={accessoriesTotalCount} duration={3} />
                       </Typography>
                     </Box>
                   </Grid>
@@ -194,7 +211,7 @@ function Dashboard() {
                           color: "#FFFFFF",
                         }}
                       >
-                        10
+                        <CountUp end={accessoriesAssignedCount} duration={3} />
                       </Typography>
                     </Box>
                   </Grid>
@@ -253,7 +270,10 @@ function Dashboard() {
                           color: "#FFFFFF",
                         }}
                       >
-                        15
+                        <CountUp
+                          end={accessoriesNotAssignedCount}
+                          duration={3}
+                        />
                       </Typography>
                     </Box>
                   </Grid>

@@ -48,3 +48,14 @@
 li {
   margin: 20px;
 }
+.view-button:hover {
+  cursor: pointer;
+  /* color: blue; */
+  /* text-decoration: underline; */
+  font-weight: bold;
+  font-size: large;
+}
+.view-employee:hover {
+  cursor: pointer;
+  font-weight: bold;
+}

@@ -12,6 +12,8 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import Sidebar from "./Sidebar";
 import { Box, Typography, TextField } from "@mui/material";
+import axios from "axios";
+import { api_url } from "../apiutils";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -38,7 +40,16 @@ const filteredUsers = [
   { name: "Chairs", assigned: "10" },
 ];
 export default function AssignedAccessories() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const [accessories, setAccessories] = React.useState([]);
+    const getAccessories = async () => {
+      let response = await axios.get(`${api_url}get-asset-names`);
+      console.log(response);
+      setAccessories(response?.data?.assets);
+    };
+    React.useEffect(() => {
+      getAccessories();
+    }, []);
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -86,18 +97,23 @@ export default function AssignedAccessories() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredUsers.map((row, index) => {
+                  {accessories.map((row, index) => {
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>
                         <StyledTableCell component="th" scope="row">
                           {index + 1}
                         </StyledTableCell>
-                        <StyledTableCell align="left">
-                          {row.name}
+                        <StyledTableCell
+                          align="left"
+                          onClick={() => {
+                            navigate(`/editasset/${row.assetName}`);
+                          }}
+                        >
+                          <span className="view-button"> {row?.assetName}</span>
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row.assigned}
+                          {row.assignedCount}
                         </StyledTableCell>
                       </StyledTableRow>
                     );

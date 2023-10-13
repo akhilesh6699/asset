@@ -1,0 +1,7 @@
+.hover-cell {
+  transition: font-size 0.3s; /* Add a smooth transition effect */
+}
+
+.hover-cell:hover {
+  font-size: 16px; /* Increase the font size on hover */
+}

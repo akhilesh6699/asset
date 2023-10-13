@@ -14,6 +14,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import Sidebar from "./Sidebar";
 import { Box, Typography, TextField } from "@mui/material";
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -105,20 +106,10 @@ export default function Accessories() {
                         <StyledTableCell
                           align="left"
                           onClick={() => {
-                            if (row.name === "Monitor") {
-                              navigate("/monitor");
-                            } else if (row.name === "CPU") {
-                              navigate("/cpu");
-                            } else if (row.name === "Mouse") {
-                              navigate("/mouse");
-                            } else if (row.name === "Keyboard") {
-                              navigate("/keyboard");
-                            } else if (row.name === "Chairs") {
-                              navigate("/chairs");
-                            }
+                            navigate(`/editasset/${row.assetName}`);
                           }}
                         >
-                          {row?.assetName}
+                          <span className="view-button"> {row?.assetName}</span>
                         </StyledTableCell>
                         <StyledTableCell align="left">
                           {row?.totalCount}

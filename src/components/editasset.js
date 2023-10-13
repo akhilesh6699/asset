@@ -70,6 +70,9 @@ export default function EditAsset() {
     let response = await axios.post(`${api_url}store-assets`, formData);
     console.log(response);
     toast.success("Asset added successfully.");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
 
   return (
@@ -154,7 +157,9 @@ export default function EditAsset() {
                           {row.employeeId === " " ? "------" : row?.employeeId}
                         </StyledTableCell>
                         <StyledTableCell align="left">
-                          {row?.employeeName}
+                          {row?.employeeName === " "
+                            ? "------"
+                            : row?.employeeName}
                         </StyledTableCell>
                         <Switch
                           inputProps={{ "aria-label": "controlled" }}

@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { Box, Typography, TextField } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
+import Switch from "@mui/material/Switch";
+import { green, red } from "@mui/material/colors";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -42,6 +44,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 //   },
 // ];
 export default function Employees() {
+  const [checkedStates, setCheckedStates] = React.useState([]);
+
+  const handleChange = (event, index) => {
+    const newCheckedStates = [...checkedStates];
+    newCheckedStates[index] = event.target.checked;
+    setCheckedStates(newCheckedStates);
+  };
+
   const navigate = useNavigate();
   const [employees, setEmployees] = React.useState([]);
   const getEmployees = async () => {
@@ -98,6 +108,9 @@ export default function Employees() {
                     </StyledTableCell>
                     <StyledTableCell align="left">Phone Number</StyledTableCell>
                     <StyledTableCell align="left">Actions</StyledTableCell>
+                    <StyledTableCell align="left">
+                      Assigned/Not Assigned
+                    </StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -137,9 +150,27 @@ export default function Employees() {
                             cursor: "pointer",
                           }}
                         >
-                          View
+                          <span className="view-employee">View</span>
                           <Visibility />
                         </StyledTableCell>
+                        <Switch
+                          inputProps={{ "aria-label": "controlled" }}
+                          color={checkedStates[index] ? "primary" : "secondary"}
+                          sx={{
+                            "& .MuiSwitch-thumb": {
+                              backgroundColor: checkedStates[index]
+                                ? green[500]
+                                : red[500],
+                            },
+                            "& .MuiSwitch-track": {
+                              backgroundColor: checkedStates[index]
+                                ? green[500]
+                                : red[500],
+                            },
+                          }}
+                          checked={checkedStates[index]}
+                          onChange={(event) => handleChange(event, index)}
+                        />
                       </StyledTableRow>
                     );
                   })}
