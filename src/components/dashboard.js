@@ -49,22 +49,22 @@ function Dashboard() {
   const accessoriesNotAssignedCount = accessories.reduce((total, accessory) => {
     return total + accessory.notAssignedCount;
   }, 0);
-  const data = [
-    { value: 12, label: "Employees" },
-    { value: 25, label: "Total Accessories" },
-    { value: 10, label: "Assigned Accessories" },
-    { value: 15, label: "Not Assigned Accessories" },
-  ];
-
   // const data = [
-  //   { value: {empCount.length}, label: "Employees" },
-  //   { value: { accessoriesTotalCount }, label: "Total Accessories" },
-  //   { value: { accessoriesAssignedCount }, label: "Assigned Accessories" },
-  //   {
-  //     value: { accessoriesNotAssignedCount },
-  //     label: "Not Assigned Accessories",
-  //   },
+  //   { value: 12, label: "Employees" },
+  //   { value: 25, label: "Total Accessories" },
+  //   { value: 10, label: "Assigned Accessories" },
+  //   { value: 15, label: "Not Assigned Accessories" },
   // ];
+
+  const data = [
+    { value: empCount.length, label: "Employees" },
+    { value: accessoriesTotalCount, label: "Total Accessories" },
+    { value: accessoriesAssignedCount, label: "Assigned Accessories" },
+    {
+      value: accessoriesNotAssignedCount,
+      label: "Not Assigned Accessories",
+    },
+  ];
 
   const navigate = useNavigate();
   const cardInfo = [{ icon: <ArrowCircleRightIcon />, arrow: "Arrow" }];

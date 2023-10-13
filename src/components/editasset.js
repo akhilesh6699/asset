@@ -42,20 +42,48 @@ const filteredUsers = [
   },
 ];
 export default function EditAsset() {
-  const [checked, setChecked] = React.useState(true);
   // const [assetName, setAssetName] = React.useState();
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
+  const [checkedStates, setCheckedStates] = React.useState([]);
+  const [open, setOpen] = React.useState();
+  const handleChange = async (id) => {
+    try {
+      // Make the API call to change the employee status
+      const response = await axios.put(`${api_url}toggle-asset-status/${id}`);
+
+      // Update the employee status in the state
+
+      // Close the dialog
+      setOpen(false);
+
+      // If the new status is "enabled," update the switch's checked state
+      if (newEmployeeStatus === "enabled") {
+        const updatedCheckedStates = checkedStates.map((state, index) =>
+          index ===
+          employees.findIndex((employee) => employee.employeeId === employeeId)
+            ? true
+            : state
+        );
+        setCheckedStates(updatedCheckedStates);
+      }
+    } catch (error) {
+      // Handle error, e.g., show an error message
+      console.error("Error updating employee status: ", error);
+    }
   };
+
   const navigate = useNavigate();
 
   const { name } = useParams();
   const [assetDetails, setAssetDetails] = React.useState([]);
   const getAssetDetails = async () => {
     let response = await axios.get(`${api_url}asset-details/${name}`);
-
-    setAssetDetails(response?.data?.assetDetails);
+    const assetDetailsData = response?.data?.assetDetails || [];
+    const initialCheckedStates = assetDetailsData.map(
+      (row) => row.employeeId !== " "
+    );
+    setAssetDetails(assetDetailsData);
+    setCheckedStates(initialCheckedStates);
     console.log(response?.data);
   };
 
@@ -163,17 +191,23 @@ export default function EditAsset() {
                         </StyledTableCell>
                         <Switch
                           inputProps={{ "aria-label": "controlled" }}
-                          color={checked ? "primary" : "secondary"}
+                          color={checkedStates[index] ? "primary" : "secondary"}
                           sx={{
                             "& .MuiSwitch-thumb": {
-                              backgroundColor: checked ? green[500] : red[500],
+                              backgroundColor: checkedStates[index]
+                                ? green[500]
+                                : red[500],
                             },
                             "& .MuiSwitch-track": {
-                              backgroundColor: checked ? green[500] : red[500],
+                              backgroundColor: checkedStates[index]
+                                ? green[500]
+                                : red[500],
                             },
                           }}
-                          checked={checked}
-                          onChange={handleChange}
+                          checked={
+                            row.assetStatus === "not assigned" ? false : true
+                          }
+                          onChange={() => handleChange(row.assetId)}
                         />
                       </StyledTableRow>
                     );

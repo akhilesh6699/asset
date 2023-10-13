@@ -12,10 +12,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import { api_url } from "../apiutils";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Box, Typography, TextField } from "@mui/material";
+import { Box, Typography, TextField, Button, Modal } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import Switch from "@mui/material/Switch";
 import { green, red } from "@mui/material/colors";
+import { useState } from "react";
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#F4F7FA",
@@ -26,6 +28,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: "#F7F9FB",
@@ -35,35 +38,78 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-// const filteredUsers = [
-//   {
-//     id: "2341",
-//     name: "vinay",
-//     email: "egafgaf@gmail.com",
-//     number: "9897968564",
-//   },
-// ];
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 export default function Employees() {
   const [checkedStates, setCheckedStates] = React.useState([]);
+  const [open, setOpen] = React.useState();
 
-  const handleChange = (event, index) => {
+  const handleChange = (employeeId) => {
     const newCheckedStates = [...checkedStates];
-    newCheckedStates[index] = event.target.checked;
+
     setCheckedStates(newCheckedStates);
+    // Update the checked state for the current employeeId
+    const updatedEmployeeId = employeeId;
+    setEmployeeId(updatedEmployeeId);
+    setOpen(true);
+
+    // You can now use the 'employeeId' here as needed.
+    console.log("Employee ID:", employeeId);
   };
 
   const navigate = useNavigate();
   const [employees, setEmployees] = React.useState([]);
+  const [employeeId, setEmployeeId] = useState();
   const getEmployees = async () => {
     let response = await axios.get(`${api_url}show-all-employee`);
-    //console.log(response);
     setEmployees(response?.data?.employees);
   };
 
   React.useEffect(() => {
     getEmployees();
-    // getEmpDetails();
   }, []);
+
+  const [employeeStatus, setEmployeeStatus] = React.useState();
+  const updateEmployeeStatus = async () => {
+    try {
+      // Make the API call to change the employee status
+      const response = await axios.put(
+        `${api_url}toggle-employee-status/${employeeId}`
+      );
+
+      // Update the employee status in the state
+      const newEmployeeStatus = response.data.employeeStatus;
+      setEmployeeStatus(newEmployeeStatus);
+
+      // Close the dialog
+      setOpen(false);
+
+      // If the new status is "enabled," update the switch's checked state
+      if (newEmployeeStatus === "enabled") {
+        const updatedCheckedStates = checkedStates.map((state, index) =>
+          index ===
+          employees.findIndex((employee) => employee.employeeId === employeeId)
+            ? true
+            : state
+        );
+        setCheckedStates(updatedCheckedStates);
+      }
+    } catch (error) {
+      // Handle error, e.g., show an error message
+      console.error("Error updating employee status: ", error);
+    }
+  };
+
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -124,15 +170,7 @@ export default function Employees() {
                         <StyledTableCell align="left">
                           {row.employeeId}
                         </StyledTableCell>
-                        <StyledTableCell
-                          align="left"
-                          // onClick={() => {
-                          //   navigate("/employeename");
-                          // }}
-                          // sx={{
-                          //   cursor: "pointer",
-                          // }}
-                        >
+                        <StyledTableCell align="left">
                           {row.name}
                         </StyledTableCell>
                         <StyledTableCell align="left">
@@ -168,8 +206,10 @@ export default function Employees() {
                                 : red[500],
                             },
                           }}
-                          checked={checkedStates[index]}
-                          onChange={(event) => handleChange(event, index)}
+                          checked={
+                            row.employeeStatus === "enable" ? true : false
+                          }
+                          onChange={(event) => handleChange(row.employeeId)} // Pass employeeId here
                         />
                       </StyledTableRow>
                     );
@@ -180,6 +220,39 @@ export default function Employees() {
           </Paper>
         </Box>
       </Box>
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Are you sure you want to enable
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+            <Box mr={2}>
+              <Button
+                variant="Outlined"
+                onClick={() => {
+                  setOpen(false);
+                }}
+                sx={{ textTransform: "capitalize" }}
+              >
+                Cancel
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                sx={{ textTransform: "capitalize", bgcolor: "green" }}
+                variant="contained"
+                onClick={updateEmployeeStatus}
+              >
+                Disable
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
     </div>
   );
 }
