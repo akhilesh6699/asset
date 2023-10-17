@@ -74,6 +74,9 @@ export default function EditAsset() {
 
       // Close the dialog
       setOpen(false);
+       setTimeout(() => {
+         window.location.reload();
+       }, 1000);
 
       // If the new status is "enabled," update the switch's checked state
     } catch (error) {
@@ -235,7 +238,7 @@ export default function EditAsset() {
         >
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Are you sure you want to enable
+              Are you sure you want to change
             </Typography>
             <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
               <Box mr={2}>
@@ -255,7 +258,7 @@ export default function EditAsset() {
                   variant="contained"
                   onClick={updateAsset}
                 >
-                  Disable
+                  Yes
                 </Button>
               </Box>
             </Box>
@@ -265,4 +268,3 @@ export default function EditAsset() {
     </div>
   );
 }
-
