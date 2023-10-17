@@ -25,6 +25,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 14,
   },
 }));
+
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: "#F7F9FB",
@@ -33,25 +34,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     borderBottom: 0,
   },
 }));
-const filteredUsers = [
-  { name: "Monitor", totalcount: "25", assigned: "1", notassigned: "0" },
-  { name: "CPU", totalcount: "25", assigned: "0", notassigned: "4" },
-  { name: "Mouse", totalcount: "25", assigned: "1", notassigned: "7" },
-  { name: "Keyboard", totalcount: "25", assigned: "0", notassigned: "4" },
-  { name: "Chairs", totalcount: "25", assigned: "0", notassigned: "4" },
-];
 
 export default function Accessories() {
   const navigate = useNavigate();
   const [accessories, setAccessories] = React.useState([]);
+  const [searchQuery, setSearchQuery] = React.useState(""); // Step 1: State for search query
+  const [filteredAccessories, setFilteredAccessories] = React.useState([]); // Step 1: State for filtered accessories
+
   const getAccessories = async () => {
     let response = await axios.get(`${api_url}get-asset-names`);
     console.log(response);
     setAccessories(response?.data?.assets);
   };
+
   React.useEffect(() => {
     getAccessories();
   }, []);
+
+  // Step 3: Filter accessories based on the search query
+  React.useEffect(() => {
+    const filtered = accessories.filter((accessory) =>
+      accessory.assetName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredAccessories(filtered);
+  }, [accessories, searchQuery]);
+
   return (
     <div>
       <Box sx={{ display: "flex" }}>
@@ -68,6 +75,9 @@ export default function Accessories() {
               InputProps={{
                 endAdornment: <SearchIcon />,
               }}
+              // Step 2: Update search query state
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </Typography>
           <Paper
@@ -96,7 +106,8 @@ export default function Accessories() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {accessories.map((row, index) => {
+                  {filteredAccessories.map((row, index) => {
+                    // Use filteredAccessories
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>

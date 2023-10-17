@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import { styled } from "@mui/material/styles";
 import TableBody from "@mui/material/TableBody";
@@ -16,7 +16,6 @@ import { Box, Typography, TextField, Button, Modal } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import Switch from "@mui/material/Switch";
 import { green, red } from "@mui/material/colors";
-import { useState } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,26 +52,24 @@ const style = {
 export default function Employees() {
   const [checkedStates, setCheckedStates] = React.useState([]);
   const [open, setOpen] = React.useState();
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [employees, setEmployees] = React.useState([]);
+  const [employeeId, setEmployeeId] = useState();
+  const navigate = useNavigate();
 
   const handleChange = (employeeId) => {
     const newCheckedStates = [...checkedStates];
-
     setCheckedStates(newCheckedStates);
-    // Update the checked state for the current employeeId
-    const updatedEmployeeId = employeeId;
-    setEmployeeId(updatedEmployeeId);
+    setEmployeeId(employeeId);
     setOpen(true);
-
-    // You can now use the 'employeeId' here as needed.
     console.log("Employee ID:", employeeId);
   };
 
-  const navigate = useNavigate();
-  const [employees, setEmployees] = React.useState([]);
-  const [employeeId, setEmployeeId] = useState();
   const getEmployees = async () => {
     let response = await axios.get(`${api_url}show-all-employee`);
     setEmployees(response?.data?.employees);
+    setFilteredEmployees(response?.data?.employees); // Initialize filtered employees with all employees
   };
 
   React.useEffect(() => {
@@ -86,15 +83,10 @@ export default function Employees() {
       const response = await axios.put(
         `${api_url}toggle-employee-status/${employeeId}`
       );
-
-      // Update the employee status in the state
       const newEmployeeStatus = response.data.employeeStatus;
       setEmployeeStatus(newEmployeeStatus);
-
-      // Close the dialog
       setOpen(false);
 
-      // If the new status is "enabled," update the switch's checked state
       if (newEmployeeStatus === "enabled") {
         const updatedCheckedStates = checkedStates.map((state, index) =>
           index ===
@@ -104,10 +96,27 @@ export default function Employees() {
         );
         setCheckedStates(updatedCheckedStates);
       }
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
-      // Handle error, e.g., show an error message
       console.error("Error updating employee status: ", error);
     }
+  };
+
+  // Handle search input change
+  const handleSearchChange = (event) => {
+    setSearchInput(event.target.value);
+    filterEmployees();
+  };
+
+  // Filter employees based on search input
+  const filterEmployees = () => {
+    const searchTerm = searchInput.toLowerCase();
+    const filtered = employees.filter((employee) =>
+      employee.name.toLowerCase().includes(searchTerm)
+    );
+    setFilteredEmployees(filtered);
   };
 
   return (
@@ -122,10 +131,17 @@ export default function Employees() {
             Employees
             <TextField
               label="Search"
-              sx={{ width: "250px", marginLeft: "700px" }}
+              sx={{
+                width: "250px",
+                marginLeft: "700px",
+                "& .MuiSvgIcon-root": {
+                  cursor: "pointer",
+                },
+              }}
               InputProps={{
                 endAdornment: <SearchIcon />,
               }}
+              onChange={handleSearchChange}
             />
           </Typography>
           <Paper
@@ -160,7 +176,7 @@ export default function Employees() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {employees.map((row, index) => {
+                  {filteredEmployees.map((row, index) => {
                     const currentRowId = row._id;
                     return (
                       <StyledTableRow key={row._id}>
@@ -193,23 +209,29 @@ export default function Employees() {
                         </StyledTableCell>
                         <Switch
                           inputProps={{ "aria-label": "controlled" }}
-                          color={checkedStates[index] ? "primary" : "secondary"}
+                          color={
+                            row.employeeStatus === "enable"
+                              ? "primary"
+                              : "secondary"
+                          }
                           sx={{
                             "& .MuiSwitch-thumb": {
-                              backgroundColor: checkedStates[index]
-                                ? green[500]
-                                : red[500],
+                              backgroundColor:
+                                row.employeeStatus === "enable"
+                                  ? green[500]
+                                  : red[500],
                             },
                             "& .MuiSwitch-track": {
-                              backgroundColor: checkedStates[index]
-                                ? green[500]
-                                : red[500],
+                              backgroundColor:
+                                row.employeeStatus === "enable"
+                                  ? green[500]
+                                  : red[500],
                             },
                           }}
                           checked={
                             row.employeeStatus === "enable" ? true : false
                           }
-                          onChange={(event) => handleChange(row.employeeId)} // Pass employeeId here
+                          onChange={(event) => handleChange(row.employeeId)}
                         />
                       </StyledTableRow>
                     );
@@ -227,7 +249,7 @@ export default function Employees() {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Are you sure you want to enable
+            Are you sure you want to Change Status
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
             <Box mr={2}>
@@ -247,7 +269,7 @@ export default function Employees() {
                 variant="contained"
                 onClick={updateEmployeeStatus}
               >
-                Disable
+                Yes
               </Button>
             </Box>
           </Box>

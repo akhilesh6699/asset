@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Box, Typography, TextField, Button } from "@mui/material";
+import { Box, Typography, TextField, Button, Modal } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Switch from "@mui/material/Switch";
 import { green, red } from "@mui/material/colors";
@@ -41,15 +41,34 @@ const filteredUsers = [
     monitor: "25",
   },
 ];
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 export default function EditAsset() {
   // const [assetName, setAssetName] = React.useState();
 
   const [checkedStates, setCheckedStates] = React.useState([]);
   const [open, setOpen] = React.useState();
-  const handleChange = async (id) => {
+  const handleChange = (id) => {
+    setAssetId(id);
+    setOpen(true);
+  };
+
+  const updateAsset = async () => {
     try {
       // Make the API call to change the employee status
-      const response = await axios.put(`${api_url}toggle-asset-status/${id}`);
+      const response = await axios.put(
+        `${api_url}toggle-asset-status/${assetId}`
+      );
 
       // Update the employee status in the state
 
@@ -57,15 +76,6 @@ export default function EditAsset() {
       setOpen(false);
 
       // If the new status is "enabled," update the switch's checked state
-      if (newEmployeeStatus === "enabled") {
-        const updatedCheckedStates = checkedStates.map((state, index) =>
-          index ===
-          employees.findIndex((employee) => employee.employeeId === employeeId)
-            ? true
-            : state
-        );
-        setCheckedStates(updatedCheckedStates);
-      }
     } catch (error) {
       // Handle error, e.g., show an error message
       console.error("Error updating employee status: ", error);
@@ -76,6 +86,7 @@ export default function EditAsset() {
 
   const { name } = useParams();
   const [assetDetails, setAssetDetails] = React.useState([]);
+  const [assetId, setAssetId] = React.useState([]);
   const getAssetDetails = async () => {
     let response = await axios.get(`${api_url}asset-details/${name}`);
     const assetDetailsData = response?.data?.assetDetails || [];
@@ -160,7 +171,7 @@ export default function EditAsset() {
                 <TableHead>
                   <TableRow>
                     <StyledTableCell>Sl. no</StyledTableCell>
-                    <StyledTableCell align="left">Monitor ID</StyledTableCell>
+                    <StyledTableCell align="left">Asset ID</StyledTableCell>
                     <StyledTableCell align="left">Employee ID</StyledTableCell>
                     <StyledTableCell align="left">
                       Employee Name
@@ -217,7 +228,41 @@ export default function EditAsset() {
             </TableContainer>
           </Paper>
         </Box>
+        <Modal
+          open={open}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Are you sure you want to enable
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+              <Box mr={2}>
+                <Button
+                  variant="Outlined"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                  sx={{ textTransform: "capitalize" }}
+                >
+                  Cancel
+                </Button>
+              </Box>
+              <Box>
+                <Button
+                  sx={{ textTransform: "capitalize", bgcolor: "green" }}
+                  variant="contained"
+                  onClick={updateAsset}
+                >
+                  Disable
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Modal>
       </Box>
     </div>
   );
 }
+
